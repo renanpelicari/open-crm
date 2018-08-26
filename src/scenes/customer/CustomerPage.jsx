@@ -4,7 +4,7 @@ import CustomerTable from "./CustomerTable";
 
 const CustomerPage = () => (
   <div>
-    <Header title="Clientes"/>
+    <Header title="Open CRM"/>
     <CustomerTable />
   </div>
 );
