@@ -17,6 +17,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - React
 - CSS3
 
+## Running APP
+
+### Development environment
+* in root source of project: `npm start`
+* start backend at express-server: `cd express-server && npm run dev`
+* start mongo with docker compose: `cd express-server/docker && docker-compose up`
+
 ## Author
 Renan Peliçari Rodrigues
 
