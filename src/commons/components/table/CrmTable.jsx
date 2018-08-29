@@ -42,7 +42,7 @@ class CrmTableHeader extends React.Component {
   };
 
   render() {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, rows } = this.props;
+    const { onSelectAllClick, order, orderBy, numSelected, rowCount, columnsDefinitions } = this.props;
 
     return (
       <TableHead>
@@ -54,7 +54,7 @@ class CrmTableHeader extends React.Component {
               onChange={onSelectAllClick}
             />
           </TableCell>
-          {rows.map(row => {
+          {columnsDefinitions.map(row => {
             return (
               <TableCell
                 key={row.id}
@@ -91,7 +91,7 @@ CrmTableHeader.propTypes = {
   order: PropTypes.string.isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
-  rows: PropTypes.array.isRequired
+  columnsDefinitions: PropTypes.array.isRequired
 };
 
 const toolbarStyles = theme => ({
@@ -214,6 +214,20 @@ class CrmTable extends React.Component {
       page: 0,
       rowsPerPage: 10,
     };
+    this.updateData = this.updateData.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const shouldUpdate = nextProps.data !== this.state.data;
+    if (shouldUpdate) { this.updateData(nextProps.data); }
+    return shouldUpdate;
+  }
+
+  updateData(data) {
+    this.setState({
+      ...this.state,
+      data: data
+    });
   }
 
   handleRequestSort = (event, property) => {
@@ -267,7 +281,7 @@ class CrmTable extends React.Component {
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
-    const { classes, rows, title } = this.props;
+    const { classes, columnsDefinitions, title } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
     return (
@@ -285,7 +299,7 @@ class CrmTable extends React.Component {
               onSelectAllClick={this.handleSelectAllClick}
               onRequestSort={this.handleRequestSort}
               rowCount={data.length}
-              rows={rows}
+              columnsDefinitions={columnsDefinitions}
             />
             <TableBody>
               {data
@@ -300,7 +314,7 @@ class CrmTable extends React.Component {
                       role="checkbox"
                       aria-checked={isSelected}
                       tabIndex={-1}
-                      key={n.id}
+                      key={n._id}
                       selected={isSelected}
                     >
                       <TableCell padding="checkbox">
@@ -356,7 +370,7 @@ class CrmTable extends React.Component {
 CrmTable.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.array.isRequired,
-  rows: PropTypes.array.isRequired,
+  columnsDefinitions: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired
 };
 
